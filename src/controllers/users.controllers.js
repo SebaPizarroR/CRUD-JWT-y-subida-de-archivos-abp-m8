@@ -4,7 +4,7 @@ import {pool} from "../db.js"
 // OBTENER TODOS LOS USUARIOS, GET
 export const getAllUsers = async (req, res) => {
     try {
-        const { rows } = await pool.query('SELECT * FROM users')
+        const { rows } = await pool.query('SELECT id, name, email, created_at FROM users')
         res.json(rows);
     } catch (error) {
         res.status(500).json({message: "Error interno del servidor"})
@@ -17,7 +17,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+        const { rows } = await pool.query("SELECT id, name, email, created_at FROM users WHERE id = $1", [id]);
 
         if (rows.length === 0) {
             return res.status(404).json({ message: "Usuario no encontrado" })
