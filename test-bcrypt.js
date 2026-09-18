@@ -12,5 +12,4 @@ console.log("Hash Jane", hashJane);
 
 //comprueba una contraseña ingresada con el hash sin revelar la contraseña original
 //const esCorrecta = await bcrypt.compare("123456", hash);
-
 //console.log("¿La contraseña es correcta?", esCorrecta);

@@ -23,7 +23,11 @@ export const getUserById = async (req, res) => {
             return res.status(404).json({ message: "Usuario no encontrado" })
         }
 
-        res.json(rows[0]);
+        const user = rows[0];
+        res.json({
+            ...user, profile_image_url: user.profile_image_url ? `/uploads/${user.profile_image}` : null
+        });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({message: "Error interno del servidor"})
@@ -34,7 +38,7 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
     try {
         const data = req.body
-        const {rows} = await pool.query("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *", [data.name, data.email]);
+        const {rows} = await pool.query("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email, created_at, profile_image", [data.name, data.email]);
 
         return res.json(rows[0]);
 
@@ -76,7 +80,7 @@ export const updateUser = async (req, res) => {
         const { id } = req.params;
         const data = req.body;
 
-        const {rows} = await pool.query("UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *", [data.name, data.email, id])
+        const {rows} = await pool.query("UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING id, name, email, created_at, profile_image", [data.name, data.email, id])
 
         return res.json(rows[0]);
         
